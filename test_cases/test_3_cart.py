@@ -3,7 +3,7 @@ from base.pages.inventory_page import InventoryPage
 from base.pages.cart_page import CartPage
 from settings import Settings
 import time
-
+import pytest
 settings = Settings()
 
 def login_and_add_items(driver):
@@ -16,7 +16,7 @@ def login_and_add_items(driver):
     inventory.go_to_cart()
     return CartPage(driver)
 
-
+@pytest.mark.smoke
 def test_products_exist_in_cart(driver):
     cart_page = login_and_add_items(driver)
     items = cart_page.get_all_cart_product_names()

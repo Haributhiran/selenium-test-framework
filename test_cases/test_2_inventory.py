@@ -2,9 +2,12 @@ from base.pages.login_page import LoginPage
 from base.pages.inventory_page import InventoryPage
 from settings import Settings
 import time
+import pytest
 
 settings = Settings()
 
+@pytest.mark.smoke
+@pytest.mark.regression
 def test_add_to_cart(driver):
     inventory = InventoryPage(driver)
     inventory.login_and_go_to_inventory()
@@ -16,7 +19,7 @@ def test_add_to_cart(driver):
     assert inventory.get_cart_count() == "0"
     time.sleep(2)
 
-
+@pytest.mark.regression
 def test_sort_by_name_atoz(driver):
     inventory = InventoryPage(driver)
     inventory.login_and_go_to_inventory()

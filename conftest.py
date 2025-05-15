@@ -1,31 +1,36 @@
 import pytest
 from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
-from webdriver_manager.chrome import ChromeDriverManager
 from settings import Settings
-from base.pages.login_page import LoginPage
 
 settings = Settings()
 
+def pytest_addoption(parser):
+    parser.addoption(
+        "--browser", action="store", default="chrome", help="Browser to run tests against: chrome or firefox"
+    )
+    parser.addoption(
+        "--headless", action="store_true", help="Run tests in headless mode"
+    )
+
 @pytest.fixture
-def driver():
-    service_obj = Service(executable_path=ChromeDriverManager().install())
-    options = webdriver.ChromeOptions()
-    options.add_argument("--start-maximized")
-    driver = webdriver.Chrome(service=service_obj, options=options)
+def driver(request):
+    browser = request.config.getoption("--browser")
+    headless = request.config.getoption("--headless")
+
+    if browser.lower() == "chrome":
+        options = webdriver.ChromeOptions()
+        if headless:
+            options.add_argument("--headless=new")
+        driver = webdriver.Chrome(options=options)
+    elif browser.lower() == "firefox":
+        options = webdriver.FirefoxOptions()
+        if headless:
+            options.add_argument("--headless")
+        driver = webdriver.Firefox(options=options)
+    else:
+        raise ValueError(f"Unsupported browser: {browser}")
+    
+    driver.maximize_window()
     driver.implicitly_wait(10)
     yield driver
-    driver.quit()
-
-# @pytest.fixture
-# def setup_teardown():
-#     service_obj = Service(executable_path=ChromeDriverManager().install())
-#     options = webdriver.ChromeOptions()
-#     options.add_argument("--start-maximized")
-#     driver = webdriver.Chrome(service=service_obj, options=options)
-#     driver.implicitly_wait(10)
-#     login_page = LoginPage(driver)
-#     login_page.login(settings.username, settings.password)
-#     yield
-#     login_page.logout()
-#     driver.quit()
+    driver.quit()    

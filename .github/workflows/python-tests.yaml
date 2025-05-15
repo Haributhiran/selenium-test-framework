@@ -34,9 +34,7 @@ jobs:
     - name: Install browser drivers
       run: |
         sudo apt-get update
-        sudo apt-get install -y chromium-chromedriver firefox-geckodriver
-        sudo ln -s /usr/lib/chromium-browser/chromedriver /usr/bin/chromedriver || true
-        sudo ln -s /usr/bin/geckodriver /usr/local/bin/geckodriver || true
+        sudo apt-get install -y chromium firefox
 
     - name: Run tests on ${{ matrix.browser }}
       run: |

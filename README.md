@@ -6,6 +6,7 @@ This is a test automation framework built with Python, Selenium, and Pytest.
 
 - Python 3.10
 - pip (Python package installer)
+- Chrome and/or Firefox browser installed
 
 ## Setup Instructions
 
@@ -31,6 +32,34 @@ To run all tests:
 pytest
 ```
 
+### Browser Options
+- Run tests in Chrome (default):
+  ```bash
+  pytest --browser=chrome
+  ```
+- Run tests in Firefox:
+  ```bash
+  pytest --browser=firefox
+  ```
+- Run tests in headless mode:
+  ```bash
+  pytest --headless
+  ```
+- Combine browser and headless options:
+  ```bash
+  pytest --browser=chrome --headless
+  ```
+
+### Parallel Execution
+To run tests in parallel using pytest-xdist:
+```bash
+# Run tests using 4 parallel processes
+pytest -n 4
+
+# Run tests using auto-detected number of CPU cores
+pytest -n auto
+```
+
 ### Running Specific Test Categories
 - Run smoke tests:
   ```bash
@@ -40,6 +69,13 @@ pytest
   ```bash
   pytest -m regression
   ```
+
+### Combining Options
+You can combine different options:
+```bash
+# Run smoke tests in parallel using Chrome in headless mode
+pytest -m smoke -n 4 --browser=chrome --headless
+```
 
 ### Test Reports
 
@@ -68,3 +104,5 @@ After test execution, an HTML report will be generated at `reports/report.html`.
 - Test markers are defined in `pytest.ini`
 - Smoke tests are quick sanity checks
 - Regression tests are comprehensive test suites
+- Browser options are configured in `conftest.py`
+- Parallel execution requires pytest-xdist package
